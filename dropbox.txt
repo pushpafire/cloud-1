@@ -1,0 +1,42 @@
+const { Dropbox } = require("dropbox");
+const fetch = require("node-fetch");
+const fs = require("fs");
+
+// Initialize Dropbox instance with access token
+const dbx = new Dropbox({
+  accessToken:
+    "YOUR_ACCESS_TOKEN",
+  fetch: fetch,
+});
+
+async function uploadFile() {
+  const fileContent = fs.readFileSync("file.txt");
+
+  try {
+    const response = await dbx.filesUpload({
+      path: "/file.txt",
+      contents: fileContent,
+    });
+    console.log("File uploaded:", response);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+}
+
+const downloadFile = async () => {
+  try {
+    const response = await dbx.filesDownload({ path: "/file.txt" });
+
+    // The file's binary content is in response.result.fileBinary
+    const fileContents = response.result.fileBinary;
+
+    // Save the file content to the local filesystem
+    fs.writeFileSync("download.txt", fileContents, "binary");
+
+    console.log("File downloaded successfully");
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+};
+
+downloadFile();
