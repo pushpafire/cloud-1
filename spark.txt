@@ -37,7 +37,7 @@ create a file and give some words in it
 
 val textFile =sc.textFile("/home/tce/kumar.txt")
 
-val words=textFile.flatmap(line => line.split(" "))
+val words=textFile.flatMap(line => line.split(" "))
 
 val wordpairs = words.map(word => (word,1))
 
